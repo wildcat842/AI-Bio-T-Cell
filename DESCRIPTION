@@ -1,0 +1,35 @@
+Package: aibio.r
+Type: Package
+Title: R Helpers for AI-Bio-T-Cell Project
+Version: 0.1.0
+Authors@R: c(
+    person("Sojung", "Kim", email = "sojung.kim.nca@gmail.com", role = c("aut", "cre"))
+  )
+Description: R-side utilities for the AI-Bio-T-Cell project. Provides
+    helpers for Seurat/Signac preprocessing of RIKEN ReapTEC and related
+    T-cell single-cell datasets, enhancer-GWAS overlap analysis with
+    GenomicRanges, and visualization helpers for cell state trajectories.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.0
+Depends:
+    R (>= 4.3.0)
+Imports:
+    Seurat (>= 5.0),
+    Signac (>= 1.13),
+    tidyverse,
+    GenomicRanges,
+    rtracklayer,
+    SingleCellExperiment,
+    Matrix
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    pkgdown
+Config/testthat/edition: 3
+URL: https://github.com/wildcat842/AI-Bio-T-Cell
+BugReports: https://github.com/wildcat842/AI-Bio-T-Cell/issues

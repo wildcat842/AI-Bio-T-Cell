@@ -1,0 +1,33 @@
+---
+title: "01 - Seurat 기반 T-cell Exhaustion EDA"
+author: "Sojung Kim"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(here)
+library(Seurat)
+source(here("src", "R", "R", "seurat_helpers.R"))
+```
+
+## 데이터 로드
+
+Daniel 2022 데이터는 `datasets/03_daniel2022_exhaustion/processed/` 폴더에서 로드합니다.
+GEO accession 확정 후 다운로드 후 진행.
+
+```{r load, eval=FALSE}
+# obj <- readRDS(here("datasets", "03_daniel2022_exhaustion", "processed", "daniel2022.rds"))
+# obj <- preprocess_seurat(obj)
+# obj <- subset_t_cells(obj)
+# DimPlot(obj, group.by = "state")
+```
+
+## 다음 단계
+- TPEX / TEX 마커 (TCF7, PDCD1, HAVCR2 등) 시각화
+- Trajectory inference (slingshot/monocle3)
+- AnnData export → 토픽 1 Flow Matching 입력

@@ -1,0 +1,39 @@
+# 실험 단위 설정. 한 실험 = 한 폴더.
+# 폴더명 규칙: YYYYMMDD_topicN_brief-slug
+experiment:
+  name: "_template"
+  topic: "T?"
+  owner: "Sojung Kim"
+  created: "2026-05-18"
+  description: |
+    템플릿. 새 실험을 시작할 때 본 폴더를 복사한 뒤 config.yaml의 모든 값을 수정.
+
+data:
+  inputs:
+    - "datasets/01_reaptec_atlas/processed/"
+  splits:
+    train_fraction: 0.8
+    val_fraction: 0.1
+    test_fraction: 0.1
+  seed: 42
+
+model:
+  name: "flow-matching-baseline"
+  framework: "torchcfm"
+  hparams:
+    n_pcs: 50
+    sigma: 0.1
+    batch_size: 256
+    lr: 1.0e-3
+    epochs: 100
+
+logging:
+  wandb_project: "AI-Bio-T-Cell"
+  wandb_entity: ""
+  log_dir: "./runs"
+  log_every_n_steps: 50
+
+reproducibility:
+  python: "3.11"
+  torch: ">=2.2"
+  git_commit_pinned: true

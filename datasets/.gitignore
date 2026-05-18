@@ -1,0 +1,27 @@
+# 대용량 원본 데이터는 버전 관리 제외
+*/raw/*
+!*/raw/.gitkeep
+!*/raw/README.md
+
+# 처리된 대용량 파일
+*.h5ad
+*.h5mu
+*.bam
+*.fastq.gz
+*.bed.gz
+*.bigWig
+*.vcf.gz
+*.parquet
+
+# 캐시
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 통제 데이터 (MTA 필요)
+*/raw/controlled/
+*/metadata/MTA_*.pdf

@@ -1,0 +1,148 @@
+# =========================================================
+# 대규모 데이터 (CLAUDE.md: 폴더 구조만 두고 공유시키지 않는다)
+# =========================================================
+data/raw/**
+data/interim/**
+data/processed/**
+data/external/**
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
+!data/**/README.md
+
+# datasets/ 하위는 별도 .gitignore가 raw/만 제외 (구조와 README는 유지)
+
+# 대용량 바이너리/오믹스 파일
+*.h5ad
+*.h5mu
+*.h5
+*.loom
+*.zarr/
+*.bam
+*.bai
+*.sam
+*.cram
+*.fastq
+*.fastq.gz
+*.fq.gz
+*.bigWig
+*.bw
+*.bed.gz
+*.vcf
+*.vcf.gz
+*.maf
+*.parquet
+*.feather
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rds
+*.RData
+
+# 모델 체크포인트 / 로그
+checkpoints/
+runs/
+wandb/
+mlruns/
+lightning_logs/
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# =========================================================
+# Python
+# =========================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.Python
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.ipynb_checkpoints/
+.python-version
+
+# =========================================================
+# R / Bioconductor
+# =========================================================
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+*.Rproj
+renv/library/
+renv/local/
+renv/lock/
+renv/python/
+renv/staging/
+.Rapp.history
+
+# =========================================================
+# Jupyter / Quarto
+# =========================================================
+.ipynb_checkpoints/
+*_files/
+*.quarto_ipynb
+.quarto/
+
+# =========================================================
+# Obsidian (vault 설정은 공유하되, 작업 상태는 제외)
+# =========================================================
+obsidian/.obsidian/workspace.json
+obsidian/.obsidian/workspace-mobile.json
+obsidian/.obsidian/cache/
+obsidian/.obsidian/plugins/*/data.json
+obsidian/.trash/
+obsidian/.obsidian/graph.json
+
+# =========================================================
+# IDE / OS
+# =========================================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# =========================================================
+# 시크릿/설정
+# =========================================================
+.env
+.env.local
+*.pem
+*.key
+config/secrets.yaml
+secrets/
+
+# =========================================================
+# 보고서 빌드 산출
+# =========================================================
+reports/figures/_cache/
+reports/_build/
+
+# 예외: 작은 figure는 커밋 허용
+!reports/figures/**/*.png
+!reports/figures/**/*.svg
+!reports/figures/**/*.pdf

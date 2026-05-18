@@ -1,0 +1,28 @@
+{
+  "R": {
+    "Version": "4.3.2",
+    "Repositories": [
+      { "Name": "CRAN", "URL": "https://cloud.r-project.org" },
+      { "Name": "BioCsoft", "URL": "https://bioconductor.org/packages/3.18/bioc" },
+      { "Name": "BioCann", "URL": "https://bioconductor.org/packages/3.18/data/annotation" },
+      { "Name": "BioCexp", "URL": "https://bioconductor.org/packages/3.18/data/experiment" }
+    ]
+  },
+  "Bioconductor": { "Version": "3.18" },
+  "Packages": {
+    "Seurat":               { "Package": "Seurat",               "Source": "Repository", "Repository": "CRAN" },
+    "SeuratObject":         { "Package": "SeuratObject",         "Source": "Repository", "Repository": "CRAN" },
+    "Signac":               { "Package": "Signac",               "Source": "Repository", "Repository": "CRAN" },
+    "tidyverse":            { "Package": "tidyverse",            "Source": "Repository", "Repository": "CRAN" },
+    "Matrix":               { "Package": "Matrix",               "Source": "Repository", "Repository": "CRAN" },
+    "BiocManager":          { "Package": "BiocManager",          "Source": "Repository", "Repository": "CRAN" },
+    "devtools":             { "Package": "devtools",             "Source": "Repository", "Repository": "CRAN" },
+    "testthat":             { "Package": "testthat",             "Source": "Repository", "Repository": "CRAN" },
+    "renv":                 { "Package": "renv",                 "Source": "Repository", "Repository": "CRAN" },
+    "knitr":                { "Package": "knitr",                "Source": "Repository", "Repository": "CRAN" },
+    "rmarkdown":            { "Package": "rmarkdown",            "Source": "Repository", "Repository": "CRAN" },
+    "GenomicRanges":        { "Package": "GenomicRanges",        "Source": "Repository", "Repository": "Bioconductor" },
+    "rtracklayer":          { "Package": "rtracklayer",          "Source": "Repository", "Repository": "Bioconductor" },
+    "SingleCellExperiment": { "Package": "SingleCellExperiment", "Source": "Repository", "Repository": "Bioconductor" }
+  }
+}

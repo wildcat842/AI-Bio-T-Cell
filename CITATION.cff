@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+title: "AI-Bio-T-Cell: AI Virtual Cells for T-Cell Immunology"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: "Sojung"
+    family-names: "Kim"
+    email: "sojung.kim.nca@gmail.com"
+    affiliation: "AI Bio Project"
+repository-code: "https://github.com/wildcat842/AI-Bio-T-Cell"
+url: "https://github.com/wildcat842/AI-Bio-T-Cell"
+abstract: >
+  Code, dataset catalogs, methodology notes, and deliverables for a research
+  collaboration with RIKEN IMS / iTHEMS / BDR. The project integrates AI virtual
+  cell methodology (flow matching, diffusion models, GNNs) with the RIKEN ReapTEC
+  transcribed-enhancer atlas to study T-cell exhaustion attractors and enhancer
+  regulatory networks underlying immune-mediated diseases.
+keywords:
+  - AI virtual cells
+  - T cell exhaustion
+  - enhancer regulatory network
+  - ReapTEC
+  - flow matching
+  - graph neural network
+  - immunology
+  - single-cell
+license: MIT
+version: 0.1.0
+date-released: "2026-05-18"
+references:
+  - type: article
+    authors:
+      - family-names: "Oguchi"
+        given-names: "M."
+      - family-names: "Murakawa"
+        given-names: "Y."
+    title: "An atlas of transcribed enhancers across helper T cell diversity for decoding human diseases"
+    journal: "Science"
+    year: 2024
+    doi: "10.1126/science.add8394"
+  - type: article
+    authors:
+      - family-names: "Bunne"
+        given-names: "C."
+    title: "AI Virtual Cells: Priorities and Opportunities"
+    journal: "arXiv"
+    year: 2024
+    notes: "arXiv:2409.11654v2"

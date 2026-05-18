@@ -1,0 +1,32 @@
+# pip 사용자용 fallback. pyproject.toml이 우선.
+# 전체 의존성은: pip install -e ".[dev,ml]"
+
+# core
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+scikit-learn>=1.4
+pyyaml>=6.0
+requests>=2.31
+tqdm>=4.66
+
+# single-cell
+anndata>=0.10
+scanpy>=1.10
+mudata>=0.2
+
+# IO
+pyarrow>=15
+
+# viz
+matplotlib>=3.8
+seaborn>=0.13
+
+# 노트북
+jupyterlab>=4.1
+ipykernel>=6.29
+
+# 테스트/포맷
+pytest>=8.0
+ruff>=0.4
+black>=24.3
