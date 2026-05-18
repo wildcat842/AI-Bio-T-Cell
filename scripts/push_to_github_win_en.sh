@@ -1,14 +1,14 @@
 # push_to_github.ps1
-# AI-Bio-T-Cell -> GitHub 초기 push 자동화 (Windows PowerShell)
+# AI-Bio-T-Cell -> GitHub initial push automation (Windows PowerShell)
 #
-# 실행:
+# Usage:
 #   cd "C:\2026. Claude Code\work_aibio\ai bio\AI-Bio-T-Cell"
 #   .\scripts\push_to_github.ps1
 #
-# 사전 조건:
-#   - Git for Windows 설치 (https://git-scm.com/download/win)
-#   - GitHub 계정 인증 (Git Credential Manager 자동 / PAT / SSH)
-#   - github.com/wildcat842/AI-Bio-T-Cell 빈 레포가 미리 생성되어 있어야 함
+# Prerequisites:
+#   - Install Git for Windows (https://git-scm.com/download/win)
+#   - Authenticate your GitHub account (Git Credential Manager / PAT / SSH)
+#   - Create an empty repository at github.com/wildcat842/AI-Bio-T-Cell in advance
 
 $ErrorActionPreference = "Stop"
 $Repo = "https://github.com/wildcat842/AI-Bio-T-Cell.git"
@@ -19,14 +19,15 @@ Write-Host "Repo  : $Repo"
 Write-Host "Branch: $Branch"
 Write-Host ""
 
-# [0/6] 깨진 .git 디렉토리 자동 정리 (sandbox에서 생성된 잔여물이 있을 수 있음)
+# [0/6] Automatically clean broken .git directory
+# (sandbox-generated leftovers may exist)
 if (Test-Path ".git") {
     try {
         git rev-parse --is-inside-work-tree | Out-Null
-        Write-Host "[0/6] 기존 .git 레포 감지됨 - 그대로 사용" -ForegroundColor Yellow
+        Write-Host "[0/6] Existing .git repository detected - reusing it" -ForegroundColor Yellow
         $skipInit = $true
     } catch {
-        Write-Host "[0/6] 손상된 .git 감지됨 - 제거 중..." -ForegroundColor Yellow
+        Write-Host "[0/6] Corrupted .git detected - removing..." -ForegroundColor Yellow
         Remove-Item -Recurse -Force ".git"
         $skipInit = $false
     }
@@ -50,60 +51,86 @@ $cached = (git diff --cached --numstat | Measure-Object).Count
 Write-Host "  Staged: $cached files"
 Write-Host ""
 
-# [3/6] 초기 커밋 (커밋이 없을 때만)
+# [3/6] Initial commit (only if no commit exists)
 $hasCommit = $true
 try { git rev-parse HEAD 2>$null | Out-Null } catch { $hasCommit = $false }
+
 if (-not $hasCommit -and $cached -gt 0) {
-    Write-Host "[3/6] 초기 커밋" -ForegroundColor Cyan
+    Write-Host "[3/6] Initial commit" -ForegroundColor Cyan
+
     $msg = @"
 Initial commit - AI-Bio-T-Cell project scaffold
 
 - Project structure for AI Virtual Cells x RIKEN ReapTEC T-Cell research
-- 19 dataset catalog (datasets/) with READMEs and download scripts
+- 19 dataset catalogs (datasets/) with READMEs and download scripts
 - Python (aibio package) and R (Seurat/Signac helpers) source code
 - Obsidian vault for shared research notes (4 topics, concepts, ADR)
-- GitHub Actions CI for Python (ruff+pytest) and R (testthat)
-- Evaluation report, data catalog, summary slides under reports/deliverables/
+- GitHub Actions CI for Python (ruff + pytest) and R (testthat)
+- Evaluation reports, data catalog, and summary slides under reports/deliverables/
 "@
+
     git commit -m $msg
+
 } elseif ($cached -gt 0) {
-    Write-Host "[3/6] 변경사항 커밋" -ForegroundColor Cyan
+
+    Write-Host "[3/6] Commiting changes" -ForegroundColor Cyan
     git commit -m "Update project files"
+
 } else {
-    Write-Host "[3/6] 변경사항 없음 - 커밋 생략" -ForegroundColor Yellow
+
+    Write-Host "[3/6] No changes detected - skipping commit" -ForegroundColor Yellow
 }
+
 Write-Host ""
 
-# [4/6] remote 설정
-Write-Host "[4/6] remote origin 설정" -ForegroundColor Cyan
+# [4/6] Configure remote
+Write-Host "[4/6] Configuring remote origin" -ForegroundColor Cyan
+
 try {
+
     $existing = git remote get-url origin 2>$null
+
     if ($existing -ne $Repo) {
+
         git remote set-url origin $Repo
-        Write-Host "  origin 갱신: $Repo"
+        Write-Host "  Updated origin: $Repo"
+
     } else {
-        Write-Host "  origin 이미 설정됨: $existing"
+
+        Write-Host "  Origin already configured: $existing"
     }
+
 } catch {
+
     git remote add origin $Repo
-    Write-Host "  origin 추가: $Repo"
+    Write-Host "  Added origin: $Repo"
 }
+
 Write-Host ""
 
-# [5/6] LFS (선택)
-Write-Host "[5/6] Git LFS 초기화 (선택)" -ForegroundColor Cyan
+# [5/6] Git LFS (optional)
+Write-Host "[5/6] Initializing Git LFS (optional)" -ForegroundColor Cyan
+
 if (Get-Command git-lfs -ErrorAction SilentlyContinue) {
+
     git lfs install
+
     git lfs track "*.pdf" "*.xlsx" "*.docx" "*.pptx" "*.png" "*.h5" "*.h5ad" "*.rds" 2>$null
-    Write-Host "  LFS tracking 설정됨 (.gitattributes 참조)"
+
+    Write-Host "  LFS tracking configured (.gitattributes updated)"
+
 } else {
-    Write-Host "  WARN: git-lfs 미설치. 대용량 PDF/XLSX 푸시 시 https://git-lfs.com 설치 권장."
+
+    Write-Host "  WARN: git-lfs is not installed. Installing Git LFS is recommended for large PDF/XLSX files: https://git-lfs.com"
 }
+
 Write-Host ""
 
-# [6/6] push
+# [6/6] Push
 Write-Host "[6/6] git push -u origin $Branch" -ForegroundColor Cyan
+
 git push -u origin $Branch
+
 Write-Host ""
 Write-Host "[OK] Done." -ForegroundColor Green
 Write-Host "Repo: $Repo"
