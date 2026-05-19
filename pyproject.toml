@@ -25,8 +25,7 @@ classifiers = [
 dependencies = [
   "numpy>=1.26",
   "pandas>=2.1",
-  "scipy>=1.11",
-  "scipy>=1.11.4",         # 3.12 첫 지원 패치
+  "scipy>=1.11.4",         # 3.12 first supported patch
   "scikit-learn>=1.4",
   "anndata>=0.10",
   "scanpy>=1.10",
@@ -77,7 +76,7 @@ where = ["src/python"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py312"
 extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]
