@@ -8,7 +8,6 @@
 *.h5 filter=lfs diff=lfs merge=lfs -text
 *.h5ad filter=lfs diff=lfs merge=lfs -text
 *.rds filter=lfs diff=lfs merge=lfs -text
-
 # 텍스트 파일 정규화
 *.md text eol=lf
 *.py text eol=lf
@@ -22,11 +21,9 @@
 *.sh text eol=lf
 *.csv text eol=lf
 *.tsv text eol=lf
-
 # Windows 호환성
 *.bat text eol=crlf
 *.ps1 text eol=crlf
-
 # 언어 통계에서 제외 (GitHub linguist)
 docs/** linguist-documentation
 obsidian/** linguist-documentation
