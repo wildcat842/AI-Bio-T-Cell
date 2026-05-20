@@ -7,8 +7,14 @@
 # 사용: bash scripts/pull_from_github.sh [--branch main]
 
 set -euo pipefail
-BRANCH="${1:-main}"
-if [[ "$1" == "--branch" ]]; then BRANCH="$2"; fi
+BRANCH="main"
+if [[ "${1:-}" == "--branch" ]]; then
+  if [[ -z "${2:-}" ]]; then
+    echo "Usage: $0 [--branch <branch>]"
+    exit 1
+  fi
+  BRANCH="$2"
+fi
 
 log() { printf '[%s] %s\n' "$(date +%H:%M:%S)" "$*"; }
 
