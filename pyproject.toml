@@ -40,13 +40,31 @@ dependencies = [
 
 [project.optional-dependencies]
 ml = [
-  "torch>=2.2",
-  "torchvision>=0.17",
+  "torch>=2.4",
+  "torchvision>=0.19",
   "torch-geometric>=2.5",
-  "transformers>=4.40",
+  "transformers>=4.44",
+  "tokenizers>=0.20",
+  "triton>=3.0",          # required by DNABERT-2 custom kernels
+  "einops>=0.8",
   "torchcfm>=1.0",
-  "lightning>=2.2",
-  "wandb>=0.17",
+  "lightning>=2.4",
+  "wandb>=0.18",
+  "diffusers>=0.30",       # Topic 4 perturbation
+]
+bridge = [
+  # R <-> Python interop and genomic IO needed for ReapTEC .rds workflow
+  "anndata2ri>=1.3",       # R SCE -> Python AnnData
+  "rpy2>=3.5",             # call R from Python (rare, but useful)
+  "pyfaidx>=0.7",          # FASTA random access for enhancer sequences
+  "pyranges>=0.0.129",     # BED/GTF arithmetic on the Python side
+  "pybigwig>=0.3",         # bigWig signal extraction
+  "openpyxl>=3.1",         # read Dryad DataS1/3/5 .xlsx
+]
+genome = [
+  "biopython>=1.83",
+  "pysam>=0.22",
+  "intervaltree>=3.1",
 ]
 spatial = [
   "spatialdata>=0.1",
