@@ -33,6 +33,14 @@ status: living
 
 - [[60_Methods/Flow_Matching]]
 - [[60_Methods/Unbalanced_Schrodinger_Bridge]]
+- [[60_Methods/DNABERT2_Embedding]]
+- [[60_Methods/GNN_Enhancer_Network]]
+- [[60_Methods/ReapTEC_Pipeline]]
+- [[60_Methods/R_Python_Bridge]]
+
+## 학습 자료
+
+- [[60_Methods/R_Manual|R 매뉴얼 - 본 프로젝트 초보자 가이드]] · `#tutorial #language/R` — Seurat까지, VS Code 환경 기준
 
 ## 핵심 논문
 
