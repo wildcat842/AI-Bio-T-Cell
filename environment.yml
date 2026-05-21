@@ -1,42 +1,135 @@
-name: aibio
+# AI-Bio-T-Cell conda env (Miniforge3 / Mamba)
+#
+# Provides Python 3.12 + R 4.3 + Bioconductor + GPU PyTorch in a single env,
+# so that the R<->Python bridge (sceasy / reticulate / anndata2ri) works without
+# having to maintain a separate R installation on the shared server.
+#
+# Quick start:
+#   mamba env create -f environment.yml          # 처음 설치 (15-30분)
+#   mamba env update -f environment.yml --prune  # 의존성 변경 시 업데이트
+#   conda activate AI-Bio-T-Cell
+#   pip install -e ".[dev,ml,bridge,genome]"     # Python 측 editable 설치
+#   bash datasets/01_reaptec_atlas/scripts/install_r_bridge.R  # sceasy/SeuratDisk
+#
+# 빠른 솔버: mamba (Miniforge3 ≥23.10 기본 포함) 또는 micromamba
+name: AI-Bio-T-Cell
 channels:
   - conda-forge
   - bioconda
-  - pytorch
   - nvidia
 dependencies:
+  # ---- Python ----
   - python=3.12
   - pip
+  - mamba             # 일관성 위해 env 내부에도 둠
+  - uv                # (선택) 빠른 pip 대체
+
+  # 단일 세포 / 수치
   - numpy>=1.26
   - pandas>=2.1
-  - scipy>=1.11
+  - scipy>=1.11.4
   - scikit-learn>=1.4
   - pyarrow>=15
-  - pyyaml
-  - requests
-  - tqdm
-  - matplotlib
-  - seaborn
-  - jupyterlab
-  - ipykernel
-  # single-cell
+  - openpyxl>=3.1
+  - matplotlib>=3.8
+  - seaborn>=0.13
+  - jupyterlab>=4.1
+  - ipykernel>=6.29
+
+  # 단일 세포 (Python)
   - anndata>=0.10
   - scanpy>=1.10
-  - mudata
-  # bioconda 도구
+  - mudata>=0.2
+
+  # 게놈 IO
+  - pyfaidx>=0.7
+  - pyranges>=0.0.129
+  - pysam>=0.22
+  - bedtools
   - samtools
   - bcftools
-  - bedtools
-  # 테스트/포맷
-  - pytest
-  - black
-  - ruff
-  # ML (CPU 기본, GPU는 별도 설치)
-  - pytorch>=2.2
-  - pytorch-lightning>=2.2
+
+  # ML (CPU 기본 - GPU PyTorch는 마지막에 별도 pip로 설치하는 것이 단순)
+  - pytorch>=2.4
+  - pytorch-cuda=12.4    # CUDA 12.4 빌드; 시스템 드라이버에 맞춰 12.1로 내릴 수 있음
+  - torchvision
+  - lightning>=2.4
+
+  # ---- R 4.3 + Bioconductor 3.18 ----
+  - r-base=4.3
+  - r-essentials       # tidyverse, rmarkdown, knitr 등 표준 묶음
+  - r-renv
+  - r-remotes
+  - r-devtools
+  - r-testthat
+  - r-here
+  - r-optparse
+  - r-matrix
+  - r-reticulate       # R<->Python 호출
+  - r-seurat>=5.0      # conda-forge
+  - r-signac>=1.13     # conda-forge
+  - r-tidyverse
+  - r-data.table
+  - r-future
+  - r-future.apply
+
+  # Bioconductor (bioconda 채널)
+  - bioconductor-genomicranges
+  - bioconductor-rtracklayer
+  - bioconductor-singlecellexperiment
+  - bioconductor-summarizedexperiment
+  - bioconductor-biocparallel
+  - bioconductor-zellkonverter    # SCE <-> AnnData 표준 변환
+  - bioconductor-rhdf5
+
+  # 빌드 도구 (sceasy/SeuratDisk 같은 GitHub R 패키지 컴파일에 필요)
+  - compilers
+  - make
+  - cmake
+  - pkg-config
+
+  # ---- 시스템 유틸 ----
+  - git
+  - git-lfs
+  - aria2              # 멀티커넥션 다운로드 (Dryad 22 GB)
+  - jq
+  - tree
+
+  # ---- 추가 Python (pip 경로) ----
   - pip:
-    - torch-geometric>=2.5
-    - transformers>=4.40
-    - torchcfm
-    - wandb
+    # Project (editable install)
     - -e .
+    # ML extras
+    - torch-geometric>=2.5
+    - transformers>=4.44
+    - tokenizers>=0.20
+    - einops>=0.8
+    - triton>=3.0          # DNABERT-2 custom kernels (Linux/CUDA만)
+    - torchcfm>=1.0
+    - diffusers>=0.30
+    - wandb>=0.18
+    # Bridge / genome
+    - anndata2ri>=1.3
+    - rpy2>=3.5
+    - pybigwig>=0.3
+    - biopython>=1.83
+    - intervaltree>=3.1
+
+# ---------------------------------------------------------------------------
+# 알려진 이슈 / 트러블슈팅
+# ---------------------------------------------------------------------------
+# 1. R/Python 충돌: conda 안의 r-base를 쓸 때 reticulate가 시스템 R을 잡는 경우가 있다.
+#    .Renviron 또는 .Rprofile에 다음을 추가:
+#       RETICULATE_PYTHON=/path/to/miniforge3/envs/AI-Bio-T-Cell/bin/python
+#
+# 2. CUDA 12.4 휠이 시스템 드라이버와 안 맞으면 'pytorch-cuda=12.1' 또는 '12.6'으로 조정.
+#    nvidia-smi 출력의 "CUDA Version: 12.x" 값을 따른다 (드라이버 상한).
+#
+# 3. sceasy / SeuratDisk는 conda-forge에 없음 -> R 안에서:
+#       remotes::install_github(c('cellgeni/sceasy','mojaveazure/seurat-disk'))
+#    스크립트: datasets/01_reaptec_atlas/scripts/install_r_bridge.R
+#
+# 4. solve 시간이 너무 길면:  CONDA_SOLVER=libmamba mamba env create -f environment.yml
+#
+# 5. 공용 서버에서 디스크 절약: ~/miniforge3/pkgs 캐시 정기 청소
+#       mamba clean -a -y

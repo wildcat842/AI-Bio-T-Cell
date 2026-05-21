@@ -1,11 +1,16 @@
 ---
 title: "Bunne 2024 - AI Virtual Cells: Priorities and Opportunities"
-authors: [Bunne C, et al.]
+authors:
+  - Charlotte Bunne
+  - et al.
 year: 2024
 journal: arXiv
 doi: ""
-url: "https://arxiv.org/abs/2409.11654"
-tags: [literature, key, vision-paper]
+url: https://arxiv.org/abs/2409.11654
+tags:
+  - literature
+  - key
+  - vision-paper
 status: read
 ---
 

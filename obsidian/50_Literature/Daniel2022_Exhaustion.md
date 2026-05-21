@@ -1,9 +1,13 @@
 ---
-title: "Daniel 2022 - Divergent clonal differentiation trajectories of T cell exhaustion"
-authors: [Daniel B, et al.]
+title: Daniel 2022 - Divergent clonal differentiation trajectories of T cell exhaustion
+authors:
+  - Daniel B
+  - et al.
 year: 2022
-journal: "Nature Immunology (PMC11225711)"
-tags: [literature, key]
+journal: Nature Immunology (PMC11225711)
+tags:
+  - literature
+  - key
 status: to-read
 ---
 

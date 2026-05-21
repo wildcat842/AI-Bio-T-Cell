@@ -6,7 +6,10 @@
   "attachmentFolderPath": "_attachments",
   "newFileLocation": "current",
   "spellcheck": true,
-  "spellcheckLanguages": ["ko", "en-US"],
+  "spellcheckLanguages": [
+    "ko",
+    "en-US"
+  ],
   "showLineNumber": true,
   "strictLineBreaks": false,
   "showFrontmatter": true,
