@@ -16,6 +16,10 @@ name: AI-Bio-T-Cell
 channels:
   - conda-forge
   - bioconda
+<<<<<<< HEAD
+=======
+# nvidia/pytorch 채널은 사용하지 않는다. CUDA 런타임은 PyTorch wheel에 번들로 포함된다.
+>>>>>>> 7289eb9 (local edits before pull)
 dependencies:
   # ---- Python ----
   - python=3.12
@@ -48,7 +52,14 @@ dependencies:
   - samtools
   - bcftools
 
+<<<<<<< HEAD
   # ML (CPU 기본 - GPU PyTorch는 마지막에 별도 pip로 설치하는 것이 단순)
+=======
+  # ML 패키지는 모두 아래 pip: 섹션에서 PyTorch 공식 CUDA wheel로 설치한다.
+  # (conda-forge의 pytorch는 CUDA 빌드가 제한적이고, 'pytorch-cuda'는 pytorch 채널
+  #  전용 패키지인데 그 채널은 PyTorch 팀이 2024년 conda 배포를 종료했다.
+  #  pip + --extra-index-url 방식이 현재 표준이며 L40S/CUDA 12.4와 호환된다.)
+>>>>>>> 7289eb9 (local edits before pull)
 
   # ---- R 4.3 + Bioconductor 3.18 ----
   - r-base=4.3
@@ -77,6 +88,7 @@ dependencies:
   - bioconductor-zellkonverter    # SCE <-> AnnData 표준 변환
   - bioconductor-rhdf5
 
+<<<<<<< HEAD
   # ---- R<->Python bridge (conda-forge binary) ----
   - rpy2>=3.5
   - anndata2ri>=1.3
@@ -89,12 +101,27 @@ dependencies:
   - zlib
   - pcre2
   - icu
+=======
+  # ---- R<->Python bridge (conda-forge binary 우선; pip로 빌드 시 -llzma 등 system lib 문제) ----
+  - rpy2>=3.5                 # 핵심 bridge. pip는 R+lzma+bz2 link error
+  - anndata2ri>=1.3           # R SCE -> Python AnnData
+  - pybigwig>=0.3             # bigWig signal extraction (C ext, conda 권장)
+  - biopython>=1.83
+  - pyfaidx>=0.7
+  - pyranges>=0.0.129
+>>>>>>> 7289eb9 (local edits before pull)
 
   # 빌드 도구 (sceasy/SeuratDisk 같은 GitHub R 패키지 컴파일에 필요)
   - compilers
   - make
   - cmake
   - pkg-config
+  # rpy2 같은 R-linking 빌드를 위한 system 라이브러리
+  - xz                        # liblzma
+  - bzip2
+  - zlib
+  - pcre2
+  - icu
 
   # ---- 시스템 유틸 ----
   - git
@@ -103,12 +130,19 @@ dependencies:
   - jq
   - tree
 
-  # ---- 추가 Python (pip 경로) ----
+  # ---- 추가 Python (pip 경로, PyPI 표준) ----
+  #
+  # NOTE: torch / torchvision / torchaudio / lightning은 여기에 두지 않는다.
+  #   `--extra-index-url`을 environment.yml의 pip 섹션에 두면 uv (또는 modern
+  #   conda)가 dependency-confusion 보호 동작으로 첫 매칭 인덱스만 본다.
+  #   결과: PyTorch 인덱스의 옛 setuptools<=70만 보이고 rpy2 설치 실패.
+  #   해결: torch는 setup_miniforge.sh / 수동 1줄로 따로 설치한다 (아래 주석 §A 참조).
+  #
   - pip:
     # PyTorch + CUDA 12.4 wheel (server: L40S, driver 550.x)
     # Project (editable install)
     - -e .
-    # ML extras
+    # ML extras (PyPI에서) - 모두 순수 Python이거나 PyPI wheel 충분
     - torch-geometric>=2.5
     - transformers>=4.44
     - tokenizers>=0.20
@@ -117,9 +151,24 @@ dependencies:
     - torchcfm>=1.0
     - diffusers>=0.30
     - wandb>=0.18
+<<<<<<< HEAD
     # Bridge / genome
+=======
+    # Bridge / genome (heavy binaries는 위 conda deps로 이동했음)
+>>>>>>> 7289eb9 (local edits before pull)
     - intervaltree>=3.1
 
+# ---------------------------------------------------------------------------
+# §A. PyTorch (CUDA wheel) 별도 설치 — env 생성 후 1줄
+# ---------------------------------------------------------------------------
+#   conda activate AI-Bio-T-Cell
+#   pip install --index-url https://download.pytorch.org/whl/cu124 \
+#               'torch>=2.4,<2.6' 'torchvision>=0.19' 'torchaudio>=2.4'
+#   pip install 'lightning>=2.4'    # PyPI에서
+#
+# (`scripts/setup_miniforge.sh`가 자동으로 위를 호출한다.)
+#
+# 드라이버가 12.1이면 cu124 → cu121, 12.6+이면 cu126 (또는 cu128).
 # ---------------------------------------------------------------------------
 # 알려진 이슈 / 트러블슈팅
 # ---------------------------------------------------------------------------
@@ -127,8 +176,11 @@ dependencies:
 #    .Renviron 또는 .Rprofile에 다음을 추가:
 #       RETICULATE_PYTHON=/path/to/miniforge3/envs/AI-Bio-T-Cell/bin/python
 #
-# 2. CUDA 12.4 휠이 시스템 드라이버와 안 맞으면 'pytorch-cuda=12.1' 또는 '12.6'으로 조정.
-#    nvidia-smi 출력의 "CUDA Version: 12.x" 값을 따른다 (드라이버 상한).
+# 2. CUDA 버전 변경: pip:의 --extra-index-url을 교체.
+#       https://download.pytorch.org/whl/cu121   (드라이버 12.1)
+#       https://download.pytorch.org/whl/cu124   (드라이버 12.4, 현 서버)
+#       https://download.pytorch.org/whl/cu126   (드라이버 12.6+)
+#    드라이버가 12.x이면 그 이하 wheel은 모두 호환된다 (nvidia-smi의 "CUDA Version"이 상한).
 #
 # 3. sceasy / SeuratDisk는 conda-forge에 없음 -> R 안에서:
 #       remotes::install_github(c('cellgeni/sceasy','mojaveazure/seurat-disk'))
