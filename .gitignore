@@ -117,7 +117,10 @@ obsidian/.obsidian/graph.json
 # =========================================================
 # IDE / OS
 # =========================================================
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
 .idea/
 .DS_Store
 Thumbs.db

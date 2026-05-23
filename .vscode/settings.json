@@ -1,0 +1,29 @@
+{
+  "// R extension"            : "use conda env's R, not system",
+  "r.rterm.linux"              : "/home/lucia/miniforge3/envs/AI-Bio-T-Cell/bin/R",
+  "r.rpath.linux"              : "/home/lucia/miniforge3/envs/AI-Bio-T-Cell/bin/R",
+  "r.bracketedPaste"           : true,
+  "r.plot.useHttpgd"           : true,
+  "r.lsp.diagnostics"          : true,
+  "r.alwaysUseActiveTerminal"  : false,
+  "r.session.useWebServer"     : true,
+
+  "// Python"                  : "use conda env's python",
+  "python.defaultInterpreterPath": "/home/lucia/miniforge3/envs/AI-Bio-T-Cell/bin/python",
+  "python.terminal.activateEnvironment": true,
+
+  "// Editor"                  : "consistency for shared repo",
+  "files.eol"                  : "\n",
+  "editor.formatOnSave"        : false,
+  "editor.rulers"              : [100],
+  "files.trimTrailingWhitespace": true,
+
+  "// Search exclusions"       : "skip large dirs",
+  "search.exclude": {
+    "**/data/raw/**"           : true,
+    "**/.venv/**"              : true,
+    "**/_attachments/**"       : true,
+    "**/.git/**"               : true,
+    "**/__pycache__/**"        : true
+  }
+}
