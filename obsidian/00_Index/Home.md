@@ -29,18 +29,21 @@ status: living
 - [[10_Concepts/T_Cell_Exhaustion]]
 - [[10_Concepts/ReapTEC_Enhancer_Atlas]]
 
-## 방법론
+## 방법론 (연구·모델링)
 
 - [[60_Methods/Flow_Matching]]
 - [[60_Methods/Unbalanced_Schrodinger_Bridge]]
 - [[60_Methods/DNABERT2_Embedding]]
 - [[60_Methods/GNN_Enhancer_Network]]
 - [[60_Methods/ReapTEC_Pipeline]]
-- [[60_Methods/R_Python_Bridge]]
 
-## 학습 자료
+## TechNotes (도구·인프라·트러블슈팅)
 
-- [[60_Methods/R_Manual|R 매뉴얼 - 본 프로젝트 초보자 가이드]] · `#tutorial #language/R` — Seurat까지, VS Code 환경 기준
+- [[80_TechNotes/R_Manual|R 매뉴얼 — 본 프로젝트 초보자 가이드]] · `#tutorial #language/R` — Seurat 5까지, VS Code 환경
+- [[80_TechNotes/R_Python_Bridge|R↔Python 브릿지]] · `#bridge` — sceasy / reticulate / AnnData 변환 표준
+- [[80_TechNotes/R_Package_Management|R 패키지 관리 — 의존성 지옥 탈출]] · `#R #package` — conda-forge → Bioc → CRAN → GitHub 결정 트리, install.packages 함정
+- [[80_TechNotes/htop_Monitoring|htop 모니터링 가이드]] · `#monitoring` — 공용 GPU 서버, VS Code F-키 우회
+- [[80_TechNotes/Memory_and_Swap_Management|Memory & Swap 관리]] · `#memory #swap` — swap full의 진짜 의미, OOM 예방, vmstat 진단
 
 ## 핵심 논문
 

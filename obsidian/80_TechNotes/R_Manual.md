@@ -387,6 +387,7 @@ sceasy::convertFormat(obj, from = "seurat", to = "anndata",
 | `<-` 와 `=` 차이? | 할당엔 `<-` (관례), 함수 인자엔 `=` (`f(x = 5)`) |
 | 1-based vs 0-based 헷갈림 | R은 무조건 1부터. `v[1]`이 첫 원소. |
 | `df$column` vs `df[["column"]]` | 거의 동일. `df[["column_var"]]`처럼 변수로 컬럼명 지정할 때만 `[[]]` 필수 |
+| reticulate가 `activate: No such file ... CondaError` 출력 | **cosmetic 경고** — 무시 가능. 자세한 내용은 §13 참조 |
 
 ## 11. 본 프로젝트에서 가장 자주 쓸 패턴
 
@@ -440,12 +441,70 @@ Rscript datasets/01_reaptec_atlas/scripts/rds_to_h5ad.R --max_size_gb 4
 - [Bioconductor OSCA 책](https://bioconductor.org/books/release/OSCA/) — single-cell 표준
 - [Advanced R (Hadley)](https://adv-r.hadley.nz/) — 깊이 있는 R 이해
 
+## 13. reticulate cosmetic 경고 (Miniforge env 사용 시)
+
+본 프로젝트 conda env에서 `reticulate::import()` 또는 `py_config()` 호출 시 다음 출력이 항상 나타납니다:
+
+```
+/tmp/Rtmpxxxxxx/fileXXXX.sh: line 1: /home/lucia/miniforge3/envs/AI-Bio-T-Cell/bin/activate: No such file or directory
+CondaError: Run 'conda init' before 'conda activate'
+Warning messages:
+1: In normalizePath(file.path(dirname(conda), "activate")) :
+  path[1]=".../bin/activate": No such file or directory
+```
+
+### 결론: 무시하세요. 실제 작동에 0% 영향.
+
+마지막에 `anndata 0.x.x scanpy 1.x.x all OK` 같은 정상 출력이 나오면 모든 것이 정상입니다.
+
+### 왜 발생하나
+
+1. `reticulate::import()`가 내부에서 conda env "친절한 활성화"를 시도
+2. **Anaconda 배포에는** `<env>/bin/activate` 스크립트가 존재 → 정상
+3. **Miniforge에서는** activate가 `~/miniforge3/bin/activate` 단 한 곳에만 있음 → 위 경로에 파일 없음 → bash가 stderr에 "No such file" 출력
+4. `RETICULATE_PYTHON`이 이미 설정되어 있어 실제 Python 바인딩은 정상 → 작업 진행
+
+→ 이건 R warning이 아니라 **bash가 직접 출력하는 stderr** 이므로 R의 `suppressWarnings()`로 막을 수 없습니다.
+
+### 영향 없는 작업들
+
+| 작업 | 영향 |
+| --- | --- |
+| `library(Seurat)`, Seurat 객체 조작 | ❌ (reticulate 안 씀) |
+| `sceasy::convertFormat()` (`.rds → .h5ad`) | ❌ 정상 동작 |
+| `reticulate::import()` 자체 | ❌ 마지막에 `OK` 나오면 성공 |
+| Python 측 `import scanpy, anndata` | ❌ |
+| DNABERT-2 임베딩, GNN 학습 | ❌ (R 안 씀) |
+
+### 깨끗하게 보고 싶으면 — `scripts/r_quiet.sh` 래퍼
+
+본 프로젝트에 포함된 래퍼로 cosmetic 출력만 필터링합니다 (진짜 에러는 그대로 통과):
+
+```bash
+# 일반 Rscript 대신
+bash scripts/r_quiet.sh -e '
+suppressMessages(library(reticulate))
+ad <- import("anndata")
+cat("anndata:", ad$`__version__`, "OK\n")
+'
+```
+
+자세한 사용법은 `scripts/README.md` 참조.
+
+### 협업자에게 알릴 점
+
+새 협업자가 처음 봤을 때 놀랄 수 있으므로:
+- 이 노트(§13)의 링크를 공유
+- 또는 `bash scripts/r_quiet.sh` 사용 권장
+- 또는 R Manual의 12단계 학습 코스 따라가면서 자연스럽게 익숙해짐
+
 ## 관련 노트
 - [[R_Python_Bridge]] — R↔Python 변환 표준
 - [[DNABERT2_Embedding]] — Python 측 작업 (인핸서 임베딩)
 - [[GNN_Enhancer_Network]] — Python 측 작업 (그래프 학습)
 - [[ReapTEC_Pipeline]] — 데이터 출처
 - `src/R/R/seurat_helpers.R` — 본 프로젝트 R 헬퍼 함수
+- `scripts/r_quiet.sh` — reticulate cosmetic 경고 필터링 래퍼
 
 ## 한 줄 요약
 

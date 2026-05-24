@@ -163,6 +163,32 @@ bash scripts/pull_from_github.sh --branch dev
 
 미커밋 변경이 있으면 안전을 위해 종료합니다. 먼저 `git stash` 또는 commit 하세요.
 
+## r_quiet.sh - Rscript wrapper for clean reticulate output
+
+When using `reticulate::import()` from a Miniforge conda env, R prints two
+cosmetic stderr lines about a missing `<env>/bin/activate` (Miniforge keeps
+activate only in base, not in each env). These come from bash, not R, so
+R's `suppressWarnings()` cannot mute them. This wrapper filters those
+specific lines while letting real errors through.
+
+### Usage
+
+```bash
+# Instead of:
+Rscript -e 'library(reticulate); ad <- import("anndata"); cat(ad$`__version__`, "\n")'
+
+# Use:
+bash scripts/r_quiet.sh -e 'library(reticulate); ad <- import("anndata"); cat(ad$`__version__`, "\n")'
+
+# Also works with script files:
+bash scripts/r_quiet.sh datasets/01_reaptec_atlas/scripts/install_r_bridge.R
+```
+
+Real errors and other warnings are NOT suppressed. Only the known
+Miniforge `activate` / `CondaError` / `normalizePath` lines are filtered.
+
+See `obsidian/60_Methods/R_Manual.md` §13 for the full explanation.
+
 ## Planned scripts (not yet implemented)
 
 - `download_p0_datasets.sh` - bulk download P0 datasets (ReapTEC processed, ENCODE, GTEx, GWAS)
